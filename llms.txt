@@ -1,0 +1,29 @@
+# Swiped
+
+> Free up iPhone storage by swiping: left to delete, right to keep. Free, no ads, no subscription, no account. Your photos never leave your iPhone.
+
+Swiped ("Swiped: Photo & Video Cleaner") is an iPhone and iPad app by Nicolas Valerino, an independent developer in France.
+It is a free photo and video cleaner: you swipe through your photos, left to delete and right to keep,
+then review your picks and free up storage. No ads, no subscription, no account, and no data collected:
+everything happens on the device.
+
+- App Store: https://apps.apple.com/app/id6761209879
+- Website: https://nicovlr.github.io/swiped/
+- Privacy policy: https://nicovlr.github.io/swipik-privacy/
+- Requires iOS 16 or later. Languages: English, French, German, Spanish, Italian, Portuguese, Japanese, Korean, Chinese (Simplified).
+
+## Features
+- Private by design: Everything happens on your iPhone. Swiped collects no data: “Data Not Collected” on the App Store.
+- Safe deleting: Nothing is deleted until you review your picks. Deleted photos stay in Recently Deleted for 30 days.
+- Find the big stuff: Filter by photos, videos or screenshots, by date and by size, to find the files that take the most space.
+- Space counter: See how many megabytes you are about to free, live, as you swipe.
+- Unlimited undo: Changed your mind? Go back as many cards as you want.
+- Pick up later: Your session is saved after every swipe. Come back tomorrow and carry on.
+
+## FAQ
+- Is Swiped really free? Yes. Swiping, reviewing and deleting are free, with no ads, no subscription and no account. Optional extras may come later as a one-time purchase, never as a subscription.
+- Do my photos leave my iPhone? No. Swiped looks at your photos on your iPhone only. It has no server and collects no data.
+- What happens to the photos I delete? Nothing is deleted until you confirm. iOS then moves them to Recently Deleted, where you can recover them for 30 days.
+- Does it work with iCloud Photos? Yes. Photos stored in iCloud show up too, and deleting a photo in Swiped deletes it everywhere, just like in the Photos app.
+- Which devices are supported? iPhone and iPad with iOS 16 or later, in 9 languages.
+- Is there an Android version? No. Swiped is made for iPhone and iPad only. Apps with a similar name on Android or elsewhere on the App Store are not related to it.
