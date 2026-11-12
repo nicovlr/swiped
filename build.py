@@ -20,6 +20,8 @@ APP_ID = "6761209879"
 # App Store Connect (Analytics > Acquisition > Campagnes). pt = identifiant du fournisseur.
 APP_LINK = f"https://apps.apple.com/app/apple-store/id{APP_ID}?pt=128690377&ct=site&mt=8"
 PRIVACY_URL = "https://nicovlr.github.io/swipik-privacy/"
+# Comptes officiels, déclarés aux moteurs (sameAs) et dans llms.txt.
+SOCIAL = ["https://www.instagram.com/swiped.app/"]
 SHOTS = ["1_swipe_keep", "2_swipe_delete", "4_review", "3_result"]
 
 ROOT = Path(__file__).parent
@@ -40,6 +42,7 @@ def json_ld(t, url):
         "image": BASE_URL + "img/icon-512.png",
         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
         "author": {"@type": "Person", "name": "Nicolas Valerino"},
+        "sameAs": [f"https://apps.apple.com/app/id{APP_ID}"] + SOCIAL,
     }
     return '<script type="application/ld+json">' + json.dumps(app, ensure_ascii=False).replace("</", "<\\/") + "</script>"
 
@@ -139,6 +142,7 @@ developer in France. You swipe through your photos, review your picks, then dele
 - App Store: https://apps.apple.com/app/id{APP_ID}
 - Website: {BASE_URL}
 - Privacy policy: {PRIVACY_URL}
+- Instagram: https://www.instagram.com/swiped.app/
 """,
         encoding="utf-8",
     )

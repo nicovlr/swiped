@@ -15,3 +15,4 @@ developer in France. You swipe through your photos, review your picks, then dele
 - App Store: https://apps.apple.com/app/id6761209879
 - Website: https://nicovlr.github.io/swiped/
 - Privacy policy: https://nicovlr.github.io/swipik-privacy/
+- Instagram: https://www.instagram.com/swiped.app/
