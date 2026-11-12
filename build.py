@@ -36,22 +36,25 @@ def json_ld(t, url):
         "description": t["desc"],
         "operatingSystem": "iOS 16.0 or later",
         "applicationCategory": "MultimediaApplication",
-        "inLanguage": list(LANGS),
         "installUrl": f"https://apps.apple.com/app/id{APP_ID}",
         "image": BASE_URL + "img/icon-512.png",
         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
         "author": {"@type": "Person", "name": "Nicolas Valerino"},
     }
-    faq = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
-            for q, a in t["faq"]
-        ],
-    }
-    dump = lambda o: json.dumps(o, ensure_ascii=False).replace("</", "<\\/")
-    return f'<script type="application/ld+json">{dump(app)}</script>\n<script type="application/ld+json">{dump(faq)}</script>'
+    return '<script type="application/ld+json">' + json.dumps(app, ensure_ascii=False).replace("</", "<\\/") + "</script>"
+
+
+# Sur la page anglaise (la racine) seulement : envoie le visiteur vers la langue de son téléphone.
+# Les robots (Google, ChatGPT) arrivent en anglais et restent sur la racine ; ils trouvent les autres
+# langues par les liens hreflang. « ?lang=xx » force une langue (utile pour vérifier).
+def redirect_script():
+    others = json.dumps([c for c in LANGS if c != "en"])
+    return (
+        "<script>(function(){var s=" + others + ",q=/[?&]lang=([a-z]+)/.exec(location.search),"
+        "l=q?[q[1]]:(navigator.languages||[navigator.language||\"\"]);"
+        "for(var i=0;i<l.length;i++){var c=String(l[i]).toLowerCase().split(\"-\")[0];"
+        "if(c===\"en\")return;if(s.indexOf(c)>-1){location.replace(c+\"/\");return}}})();</script>"
+    )
 
 
 def page(code, t):
@@ -60,26 +63,17 @@ def page(code, t):
     alternates = "\n".join(
         f'<link rel="alternate" hreflang="{c}" href="{BASE_URL + l["dir"]}">' for c, l in LANGS.items()
     ) + f'\n<link rel="alternate" hreflang="x-default" href="{BASE_URL}">'
-    switcher = " ".join(
-        f'<a href="{up}{l["dir"]}" lang="{c}"{" aria-current=page" if c == code else ""}>{esc(l["native"])}</a>'
-        for c, l in LANGS.items()
-    )
     shots = "\n".join(
-        f'<img src="{up}img/shots/{code}_{s}.webp" alt="{esc(alt)}" width="600" height="1304" loading="{"eager" if i == 0 else "lazy"}">'
+        f'<img src="{up}img/shots/{code}_{s}.webp" alt="{esc(alt)}" width="600" height="1304" loading="{"eager" if i < 2 else "lazy"}">'
         for i, (s, alt) in enumerate(zip(SHOTS, t["shots_alt"]))
     )
-    pills = "".join(f"<li>{esc(p)}</li>" for p in t["pills"])
-    how = "".join(f"<li><span>{i}</span>{esc(s)}</li>" for i, s in enumerate(t["how"], 1))
-    feats = "".join(f"<div class=feat><h3>{esc(h)}</h3><p>{esc(p)}</p></div>" for h, p in t["feats"])
-    faq = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>" for q, a in t["faq"])
-    # Bouton texte plutôt que le badge officiel : pas de dépendance à un serveur tiers.
-    store_btn = f'<a class=store href="{esc(APP_LINK)}">{esc(t["cta"])}<small>iPhone · iPad · {esc(t["pills"][0])}</small></a>'
 
     return f"""<!doctype html>
 <html lang="{code}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+{redirect_script() if code == "en" else ""}
 <title>{esc(t["title"])}</title>
 <meta name="description" content="{esc(t["desc"])}">
 <link rel="canonical" href="{url}">
@@ -90,7 +84,6 @@ def page(code, t):
 <meta property="og:description" content="{esc(t["desc"])}">
 <meta property="og:url" content="{url}">
 <meta property="og:image" content="{BASE_URL}img/shots/{code}_1_swipe_keep.webp">
-<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0e0f1a">
 <link rel="icon" href="{up}img/favicon.png">
 <link rel="apple-touch-icon" href="{up}img/apple-touch-icon.png">
@@ -98,51 +91,16 @@ def page(code, t):
 {json_ld(t, url)}
 </head>
 <body>
-<header class=top>
-  <a class=brand href="{up}{t["dir"]}"><img src="{up}img/icon-512.png" alt="" width="36" height="36">Swiped</a>
-  <nav class=langs aria-label="Language">{switcher}</nav>
-</header>
-
 <main>
-<section class=hero>
-  <div class=hero-text>
-    <h1>{t["h1"]}</h1>
-    <p class=sub>{esc(t["sub"])}</p>
-    <ul class=pills>{pills}</ul>
-    {store_btn}
-  </div>
+  <img class=icon src="{up}img/icon-512.png" alt="Swiped" width="88" height="88">
+  <h1>{t["h1"]}</h1>
+  <p class=sub>{esc(t["sub"])}</p>
+  <a class=store href="{esc(APP_LINK)}">{esc(t["cta"])}</a>
   <div class=shots>
 {shots}
   </div>
-</section>
-
-<section class=how>
-  <h2>{esc(t["how_title"])}</h2>
-  <ol>{how}</ol>
-</section>
-
-<section class=features>
-  <h2>{esc(t["feat_title"])}</h2>
-  <div class=grid>{feats}</div>
-</section>
-
-<section class=faq>
-  <h2>{esc(t["faq_title"])}</h2>
-  {faq}
-</section>
-
-<section class=cta>
-  <img src="{up}img/icon-512.png" alt="" width="96" height="96">
-  <p class=cta-name>{esc(t["store_name"])}</p>
-  {store_btn}
-</section>
 </main>
-
-<footer>
-  <p>{esc(t["made"])}</p>
-  <p><a href="{PRIVACY_URL}">{esc(t["privacy"])}</a> · <a href="{PRIVACY_URL}">{esc(t["support"])}</a></p>
-  <p class=legal>Apple, the Apple logo, iPhone and iPad are trademarks of Apple Inc. App Store is a service mark of Apple Inc.</p>
-</footer>
+<footer>{esc(t["made"])} · <a href="{PRIVACY_URL}">{esc(t["privacy"])}</a></footer>
 </body>
 </html>
 """
@@ -163,29 +121,24 @@ def main():
     )
     (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE_URL}sitemap.xml\n")
 
-    en = LANGS["en"]
-    faq = "\n".join(f"- {q} {a}" for q, a in en["faq"])
-    feats = "\n".join(f"- {h}: {p}" for h, p in en["feats"])
     (ROOT / "llms.txt").write_text(
         f"""# Swiped
 
-> {en["desc"]}
+> Free photo and video cleaner for iPhone and iPad. Swipe left to delete, right to keep.
 
-Swiped ("{en["store_name"]}") is an iPhone and iPad app by Nicolas Valerino, an independent developer in France.
-It is a free photo and video cleaner: you swipe through your photos, left to delete and right to keep,
-then review your picks and free up storage. No ads, no subscription, no account, and no data collected:
-everything happens on the device.
+Swiped ("Swiped: Photo & Video Cleaner" on the App Store) is made by Nicolas Valerino, an independent
+developer in France. You swipe through your photos, review your picks, then delete them to free up storage.
+
+- Free, no ads, no subscription, no account.
+- Nothing leaves the iPhone: no server, no data collected ("Data Not Collected" on the App Store).
+- Nothing is deleted before you review and confirm; deleted photos stay in Recently Deleted for 30 days.
+- Filters by type (photos, videos, screenshots), date and size; unlimited undo; sessions are saved.
+- Works with iCloud Photos. Requires iOS 16 or later. 9 languages.
+- iPhone and iPad only. Apps with a similar name on Android or elsewhere on the App Store are not related.
 
 - App Store: https://apps.apple.com/app/id{APP_ID}
 - Website: {BASE_URL}
 - Privacy policy: {PRIVACY_URL}
-- Requires iOS 16 or later. Languages: English, French, German, Spanish, Italian, Portuguese, Japanese, Korean, Chinese (Simplified).
-
-## Features
-{feats}
-
-## FAQ
-{faq}
 """,
         encoding="utf-8",
     )

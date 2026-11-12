@@ -1,14 +1,9 @@
 /* Couleurs reprises de l'icône et des captures de l'App Store. */
 :root {
   --bg: #0e0f1a;
-  --bg-2: #161727;
   --line: #262840;
   --text: #f2f2f7;
-  --muted: #a3a4ba;
-  --keep: #4ade80;
-  --del: #f0506e;
-  --accent: #585bfc;
-  --radius: 20px;
+  --muted: #9a9bb2;
   color-scheme: dark;
 }
 
@@ -18,102 +13,38 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: radial-gradient(1200px 600px at 50% -200px, #1d1a3a 0%, var(--bg) 60%) no-repeat, var(--bg);
+  background: radial-gradient(1000px 520px at 50% -180px, #1c1a36 0%, var(--bg) 65%) no-repeat, var(--bg);
   color: var(--text);
-  font: 17px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Hiragino Sans",
+  font: 17px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Hiragino Sans",
     "Apple SD Gothic Neo", "PingFang SC", "Noto Sans", sans-serif;
+  text-align: center;
 }
 
-a { color: inherit; }
+main { max-width: 1040px; margin: 0 auto; padding: 64px 16px 40px; }
 
-main, .top, footer { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+.icon { border-radius: 20px; display: block; margin: 0 auto 28px; }
 
-/* En-tête */
-.top {
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding-top: 18px; padding-bottom: 18px; flex-wrap: wrap;
-}
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; text-decoration: none; }
-.brand img { border-radius: 9px; }
-.langs { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 14px; }
-.langs a { color: var(--muted); text-decoration: none; }
-.langs a:hover, .langs a[aria-current] { color: var(--text); }
+h1 { font-size: clamp(32px, 5.5vw, 54px); line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 16px; }
 
-/* Accroche */
-.hero { text-align: center; padding: 40px 0 24px; }
-h1 {
-  font-size: clamp(34px, 6vw, 60px); line-height: 1.08; letter-spacing: -0.02em;
-  margin: 0 auto 20px; max-width: 900px;
-}
-h1 em { font-style: normal; }
-.keep { color: var(--keep); }
-.del { color: var(--del); }
-.sub { color: var(--muted); font-size: clamp(17px, 2.2vw, 20px); max-width: 680px; margin: 0 auto 24px; }
-
-.pills { list-style: none; padding: 0; margin: 0 0 28px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-.pills li {
-  border: 1px solid var(--line); background: var(--bg-2); border-radius: 999px;
-  padding: 6px 14px; font-size: 15px;
-}
-.pills li:last-child { border-color: color-mix(in srgb, var(--keep) 45%, var(--line)); }
+.sub { color: var(--muted); font-size: clamp(17px, 2vw, 19px); max-width: 520px; margin: 0 auto 32px; }
 
 .store {
-  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
-  background: var(--text); color: var(--bg); text-decoration: none; font-weight: 700; font-size: 18px;
-  padding: 14px 30px; border-radius: 16px; transition: transform 0.15s ease;
+  display: inline-block; background: var(--text); color: var(--bg); text-decoration: none;
+  font-weight: 600; padding: 14px 28px; border-radius: 14px;
 }
-.store small { font-weight: 500; font-size: 13px; opacity: 0.65; }
-.store:hover { transform: translateY(-2px); }
+.store:hover { opacity: 0.9; }
 
 /* Captures : une rangée qui défile sur téléphone, une grille sur grand écran */
 .shots {
-  display: grid; grid-auto-flow: column; grid-auto-columns: 62%; gap: 16px;
-  overflow-x: auto; scroll-snap-type: x mandatory; margin: 44px -20px 0; padding: 0 20px 8px;
+  display: grid; grid-auto-flow: column; grid-auto-columns: 64%; gap: 14px;
+  overflow-x: auto; scroll-snap-type: x mandatory; margin: 56px -16px 0; padding: 0 16px 4px;
   scrollbar-width: none;
 }
 .shots::-webkit-scrollbar { display: none; }
-.shots img {
-  width: 100%; height: auto; border-radius: var(--radius); scroll-snap-align: center;
-  border: 1px solid var(--line); background: var(--bg-2);
-}
+.shots img { width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--line); scroll-snap-align: center; }
 @media (min-width: 760px) {
-  .shots { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); overflow: visible; margin: 56px 0 0; padding: 0; }
+  .shots { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); overflow: visible; margin: 64px 0 0; padding: 0; }
 }
 
-/* Sections */
-section { padding: 48px 0; }
-h2 { font-size: clamp(26px, 4vw, 36px); letter-spacing: -0.01em; text-align: center; margin: 0 0 28px; }
-
-.how ol { list-style: none; padding: 0; margin: 0 auto; max-width: 860px; display: grid; gap: 14px; }
-@media (min-width: 760px) { .how ol { grid-template-columns: repeat(3, 1fr); } }
-.how li {
-  background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 20px; display: flex; gap: 14px; align-items: flex-start;
-}
-.how li span {
-  flex: none; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
-  background: var(--accent); font-weight: 700;
-}
-
-.grid { display: grid; gap: 14px; }
-@media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 960px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-.feat { background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
-.feat h3 { margin: 0 0 6px; font-size: 18px; }
-.feat p { margin: 0; color: var(--muted); }
-
-.faq { max-width: 760px; margin: 0 auto; }
-details { border-bottom: 1px solid var(--line); padding: 16px 0; }
-summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
-summary::-webkit-details-marker { display: none; }
-summary::after { content: "+"; color: var(--muted); font-weight: 400; }
-details[open] summary::after { content: "–"; }
-details p { color: var(--muted); margin: 10px 0 0; }
-
-.cta { text-align: center; }
-.cta > img { border-radius: 22px; }
-.cta-name { font-weight: 700; font-size: 20px; margin: 12px 0 18px; }
-
-footer { color: var(--muted); font-size: 14px; text-align: center; padding-top: 24px; padding-bottom: 48px; border-top: 1px solid var(--line); }
-footer p { margin: 6px 0; }
-footer .legal { font-size: 12px; opacity: 0.7; }
+footer { color: var(--muted); font-size: 14px; padding: 8px 16px 48px; }
+footer a { color: inherit; }
